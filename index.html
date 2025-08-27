@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Jogadoras</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Formulario de Jogadoras</h1>
+    </header>
+
+    <main>
+        <section class="card form-section">
+            <h2>Adicionar jogadoras</h2>
+            <form id="jogadoraForm">
+                <input type="url" id="foto" placeholder="URL da Foto"required>
+                <input type="hidden" id="player-id">
+                <input type="text" id="nome" placeholder="Nome" required>
+                <input type="text" id="posicao" placeholder="Posição" required>
+                <input type="text" id="clube" placeholder="Clube" required>                
+                <input type="number" id="gols" placeholder="Gols" required>
+                <input type="number" id="assistencias" placeholder="Assistências" required>
+                <input type="number" id="jogos" placeholder="Jogos" required>
+                <button type="submit"><i class="fa-solid fa-bullhorn"></i> Postar</button>
+                <button type="submit"><i class="fa-solid fa-bullhorn"></i> Salvar Edição</button>
+
+            </form>
+        </section>
+
+       <section>
+    <h2>Lista de Jogadoras</h2>
+     <!-- Cards das jogadoras -->
+    <div id="player-list"></div>
+</section>
+</main>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
