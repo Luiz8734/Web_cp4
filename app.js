@@ -1,78 +1,88 @@
 // Dados iniciais das jogadoras
-    let initialPlayers = [
-        {
-            "id": 1,
-            "nome": "Andressa Alves",
-            "posicao": "Meio-campo",
-            "clube": "Corinthians",
-            "foto": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Andressa_Alves_2019.jpg/200px-Andressa_Alves_2019.jpg",
-            "gols": 15,
-            "assistencias": 10,
-            "jogos": 28,
-            "favorita": false
-        },
-        {
-            "id": 2,
-            "nome": "Dayana Rodríguez",
-            "posicao": "Meio-campo",
-            "clube": "Corinthians",
-            "foto": "https://pbs.twimg.com/media/F315-hUXIAAVk4i.jpg",
-            "gols": 5,
-            "assistencias": 12,
-            "jogos": 30,
-            "favorita": false
-        },
-        {
-            "id": 3,
-            "nome": "Mariza",
-            "posicao": "Zagueira",
-            "clube": "Corinthians",
-            "foto": "https://cdn.meutimao.com.br/_upload/jogador/2023/04/27/mariza_12503_grande.jpeg",
-            "gols": 2,
-            "assistencias": 1,
-            "jogos": 32,
-            "favorita": false
-        },
-        {
-            "id": 4,
-            "nome": "Thaís Regina",
-            "posicao": "Zagueira",
-            "clube": "Corinthians",
-            "foto": "https://cdn.meutimao.com.br/_upload/jogador/2023/04/27/thais_regina_12502_grande.jpeg",
-            "gols": 1,
-            "assistencias": 2,
-            "jogos": 25,
-            "favorita": false
-        },
-        {
-            "id": 5,
-            "nome": "Letícia Teles",
-            "posicao": "Zagueira",
-            "clube": "Corinthians",
-            "foto": "https://cdn.meutimao.com.br/_upload/jogador/2023/04/27/leticia_teles_12499_grande.jpeg",
-            "gols": 0,
-            "assistencias": 0,
-            "jogos": 18,
-            "favorita": false
-        }
-    ];
+let initialPlayers = [
+    {
+        "id": 1,
+        "nome": "Andressa Alves",
+        "posicao": "Meio-campo",
+        "clube": "Corinthians",
+        "foto": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Andressa_Alves_2019.jpg/200px-Andressa_Alves_2019.jpg",
+        "gols": 15,
+        "assistencias": 10,
+        "jogos": 28,
+        "favorita": false
+    },
+    {
+        "id": 2,
+        "nome": "Dayana Rodríguez",
+        "posicao": "Meio-campo",
+        "clube": "Corinthians",
+        "foto": "https://pbs.twimg.com/media/F315-hUXIAAVk4i.jpg",
+        "gols": 5,
+        "assistencias": 12,
+        "jogos": 30,
+        "favorita": false
+    },
+    {
+        "id": 3,
+        "nome": "Mariza",
+        "posicao": "Zagueira",
+        "clube": "Corinthians",
+        "foto": "https://cdn.meutimao.com.br/_upload/jogador/2023/04/27/mariza_12503_grande.jpeg",
+        "gols": 2,
+        "assistencias": 1,
+        "jogos": 32,
+        "favorita": false
+    },
+    {
+        "id": 4,
+        "nome": "Thaís Regina",
+        "posicao": "Zagueira",
+        "clube": "Corinthians",
+        "foto": "https://cdn.meutimao.com.br/_upload/jogador/2023/04/27/thais_regina_12502_grande.jpeg",
+        "gols": 1,
+        "assistencias": 2,
+        "jogos": 25,
+        "favorita": false
+    },
+    {
+        "id": 5,
+        "nome": "Letícia Teles",
+        "posicao": "Zagueira",
+        "clube": "Corinthians",
+        "foto": "https://cdn.meutimao.com.br/_upload/jogador/2023/04/27/leticia_teles_12499_grande.jpeg",
+        "gols": 0,
+        "assistencias": 0,
+        "jogos": 18,
+        "favorita": false
+    }
+];
+
 window.onload = function () {
-    // Se não tiver nada no LocalStorage, salva os jogadores iniciais
-    if (!localStorage.getItem("players")) {
+    if (localStorage.getItem("players") === null) {
         localStorage.setItem("players", JSON.stringify(initialPlayers));
     }
 
     displayPlayers();
-    document.getElementById('jogadoraForm').addEventListener('submit', addPlayer);
+
+    // Faz o formulário funcionar para adicionar jogadoras
+    let form = document.getElementById("jogadoraForm");
+    form.addEventListener("submit", addPlayer);
+
+    const playerList = document.getElementById('player-list');
+    playerList.addEventListener('click', function (event) {
+        const clickedButton = event.target.closest('.delete-button');// Para nao exibir a mensagem 2 vezes (bug)
+        if (clickedButton) {
+            deletePlayer(clickedButton);
+        }
+    });
 };
+
 // Função para exibir os cards das jogadoras
 function displayPlayers() {
-    // Obtém as jogadoras do LocalStorage e converte de JSON para objeto
     const players = JSON.parse(localStorage.getItem("players")) || [];
     const playerList = document.getElementById('player-list');
-    playerList.innerHTML = ''; // Limpa a lista antes de exibir os jogadores
+    playerList.innerHTML = ''; // Limpa a lista antes de adicionar os cards
 
-    // Cria um card para cada jogadora
     players.forEach(player => {
         const playerElement = document.createElement('div');
         playerElement.classList.add('card-post');
@@ -85,24 +95,21 @@ function displayPlayers() {
             <p>Gols: ${player.gols}</p>
             <p>Assistências: ${player.assistencias}</p>
             <p>Jogos: ${player.jogos}</p>
-            
-            <button><i class="fa-solid fa-pen-to-square"></i> Editar</button>
-            <button><i class="fa-solid fa-eraser"></i> Apagar</button>
-            <hr style="margin:30px;">
-            
-            
-        `;
 
+            <button class="edit-button" data-id="${player.id}"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
+            <button class="delete-button" data-id="${player.id}"><i class="fa-solid fa-eraser"></i> Apagar</button>
+        `;
         playerList.appendChild(playerElement);
     });
+    
 }
 
-//Adiciona nova jogadora
+// Adiciona nova jogadora
 function addPlayer(event) {
     event.preventDefault();
 
     const newPlayer = {
-        id: Date.now(),
+        id: Date.now(), // Garante um ID único baseado no timestamp atual
         nome: document.getElementById('nome').value,
         posicao: document.getElementById('posicao').value,
         clube: document.getElementById('clube').value,
@@ -113,11 +120,24 @@ function addPlayer(event) {
         favorita: false
     };
 
-    const players = JSON.parse(localStorage.getItem("players")) || [];
-    players.unshift(newPlayer);
+    let players = JSON.parse(localStorage.getItem("players")) || []; // Garante que 'players' é um array
+
+    players.unshift(newPlayer); // Adiciona a nova jogadora no início da lista
+
     localStorage.setItem("players", JSON.stringify(players));
 
     document.getElementById('jogadoraForm').reset();
     alert("Jogadora adicionada com sucesso!");
-    displayPlayers();
+    displayPlayers(); // Atualiza a exibição das jogadoras
+}
+
+// Função para deletar uma jogadora
+function deletePlayer(buttonElement) {
+    const idToDelete = parseInt(buttonElement.dataset.id);
+    let players = JSON.parse(localStorage.getItem("players")) || [];
+
+    localStorage.setItem("players", JSON.stringify(players.filter(player => player.id !== idToDelete)));
+
+    displayPlayers(); // Atualiza a exibição das jogadoras após a exclusão
+    alert("Jogadora apagada com sucesso!");
 }
